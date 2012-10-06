@@ -1,0 +1,12 @@
+.gdnfOverlayForDnD {
+  outline: 3px dashed #e35b5b;
+  -webkit-border-radius: 10px;
+  z-index: 100;
+  font-size: 2em;
+  color: #888888;
+  background-color: #ffffff;
+  text-align: center;
+  vertical-align: middle;
+  position:absolute;
+  display:none;
+}
