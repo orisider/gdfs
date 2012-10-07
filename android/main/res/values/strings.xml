@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GDFS</string>
+    <string name="warn_no_goog_account">구글 계정을 연동하세요.</string>
+    <string name="warn_no_file_found">파일 정보를 얻지 못했습니다.</string>
+</resources>

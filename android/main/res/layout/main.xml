@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              style="@style/view_mm"
+              android:orientation="vertical"
+            >
+
+    <TextView style="@style/view_mw"
+              android:text="Google Drive OneTouch Share!"
+            android:gravity="center"
+            />
+    <GridLayout android:id="@+id/saved_acnt_info"
+                style="@style/view_mw"
+            android:alignmentMode="alignBounds"
+            android:columnCount="2">
+        <TextView android:text="saved token"
+                android:layout_columnSpan="4"
+                android:layout_gravity="center_horizontal"
+                />
+        <TextView android:text="accountName:" />
+        <TextView android:id="@+id/saved_acnt_name"/>
+        <TextView android:text="accessToken:" />
+        <TextView android:id="@+id/saved_acnt_token"/>
+    </GridLayout>
+
+    <Button android:id="@+id/set_acnt_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="set acnt"/>
+
+    <Button android:id="@+id/launch_gdrive_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="launch google drive"/>
+
+</LinearLayout>

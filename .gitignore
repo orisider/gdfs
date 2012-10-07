@@ -1,2 +1,7 @@
 .DS_Store
 .idea
+gen
+out
+bin
+local.properties
+api_key.xml

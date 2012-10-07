@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              style="@style/view_mm" >
+
+    <GridLayout android:id="@+id/saved_acnt_info"
+                style="@style/view_mw"
+                android:alignmentMode="alignBounds"
+                android:columnCount="2">
+        <TextView android:text="File Info"
+                  android:layout_columnSpan="2"
+                  android:layout_gravity="center_horizontal"
+                />
+        <TextView android:text="File Name:" />
+        <TextView android:id="@+id/file_name"/>
+        <TextView android:text="Share Url:" />
+        <TextView android:id="@+id/share_url"/>
+    </GridLayout>
+
+    <Button android:id="@+id/copy_clipboard_btn"
+            style="@style/view_mw"
+            android:text="copy to clipboard"/>
+</LinearLayout>
