@@ -21,7 +21,8 @@
       ],
       "css": [
         "css/myStyle.css",
-        "css/tipsy.css"
+        "css/tipsy.css",
+        "css/progressbar.css"
       ]
     }
   ],

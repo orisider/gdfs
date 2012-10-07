@@ -29,7 +29,8 @@
   $(overlay).on('drop', overlayDropHandler);
 
   // initialize tooltip
-  var tooltipMsg = '<img src="' + chrome.extension.getURL('img/ajax-loader.gif') + '">';
+  //var tooltipMsg = '<img src="' + chrome.extension.getURL('img/ajax-loader.gif') + '">';
+  var tooltipMsg = '<div class="blue progress-bar"><div class="completion" id="gdfsProgressBar" style="width:0%"><strong>0%</strong></div></div>';
   $.fn.tipsy.defaults = {
     delayIn: 0,      // delay before showing tooltip (ms)
     delayOut: 0,     // delay before hiding tooltip (ms)
@@ -208,7 +209,14 @@
               xhr: function() {  // custom xhr
                 myXhr = $.ajaxSettings.xhr();
                 if(myXhr.upload){ // check if upload property exists
-                  myXhr.upload.addEventListener('progress', function(e) {if(e.lengthComputable) { console.log(e.loaded, e.total)}}, false); // for handling the progress of the upload
+                  myXhr.upload.addEventListener('progress', function(e) {
+                    if(e.lengthComputable) {
+                      console.log(e.loaded, e.total)
+                      var percentage = Math.floor(e.loaded / e.total * 100) + "%";
+                      console.log(percentage);
+                      $('#gdfsProgressBar').css('width', percentage).find('strong').html(percentage);
+                    }
+                  }, false); // for handling the progress of the upload
                 }
                 return myXhr;
               },
