@@ -11,24 +11,59 @@
     //console.log(oAuthToken);
   });
 
-  // drag and drop handling
+  // distinguish the service
+  function findService(url) {
+    if (url.match(/facebook/g)) {
+      return "facebook";
+    } else if (url.match(/goolge/g)) {
+      return "gplus";
+    } else if (url.match(/twitter/g)) {
+      return "twitter"
+    }
+  }
+
+  // initialize overlay for drop file
   var overlay = $('<div>').addClass('gdnfOverlayForDnD').html('Drop file here');
   $(document.body).append(overlay);
-
-  var targetAreas = $('textarea');
-  targetAreas.on('dragenter', dragEnterHandler);
-
   $(overlay).on('dragleave', overlayDragLeaveHandler);
   $(overlay).on('drop', overlayDropHandler);
 
-  function dragEnterHandler(evt) {
-    $(overlay)
-      .width($(evt.target).outerWidth())
-      .height($(evt.target).outerHeight())
-      //.css('line-height', $(box).outerHeight())
-      .show();
+  // initialize tooltip
+  var tooltipMsg = '<img src="' + chrome.extension.getURL('img/ajax-loader.gif') + '">';
+  $.fn.tipsy.defaults = {
+    delayIn: 0,      // delay before showing tooltip (ms)
+    delayOut: 0,     // delay before hiding tooltip (ms)
+    fade: true,     // fade tooltips in/out?
+    fallback: '',    // fallback text to use when no tooltip text
+    gravity: 'n',    // gravity
+    html: true,     // is tooltip content HTML?
+    live: false,     // use live event support?
+    offset: 0,       // pixel offset of tooltip from element
+    opacity: 0.8,    // opacity of tooltip
+    title: function() {return tooltipMsg;},  // attribute/callback containing tooltip text
+    trigger: 'manual' // how tooltip is triggered - hover | focus | manual
+  };
 
-    $(overlay).offset($(evt.target).offset());
+  $(overlay).tipsy();
+
+  // initialize drag event in text input place
+  var targetInput;
+  var service = findService(location.href);
+  console.log('service: ', service);
+  if (service === 'facebook') {
+    var targetAreas = $('textarea');
+    targetAreas.on('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
+      $(overlay)
+        .width($(evt.target).outerWidth())
+        .height($(evt.target).outerHeight())
+        //.css('line-height', $(box).outerHeight())
+        .show();
+
+      $(overlay).offset($(evt.target).offset());
+      targetInput = evt.target;
+    }
+  } else if (service === 'gplus') {
+  } else if (service === 'twitter') {
   }
 
   function overlayDragLeaveHandler(evt) {
@@ -42,13 +77,15 @@
     var files = evt.dataTransfer.files;
     if (files.length > 0) {
       console.log(files);
-      uploadFileToGDrive(files[0], evt.target);
+      uploadFileToGDrive(files[0]);
+
+      $(overlay).tipsy("show");
     }
 
     overlayDragLeaveHandler();
   }
 
-  function uploadFileToGDrive(file, target) {
+  function uploadFileToGDrive(file) {
     if (!file) return; // No file selected
 
     var fileReader = new FileReader();
@@ -101,14 +138,23 @@
               console.log('success to uploading2');
               console.log(data);
               console.log(data.webContentLink);
-              $(target).sendkeys(data.webContentLink);
-              $(target).html(data.webContentLink);
+              //$(target).sendkeys(data.webContentLink);
+              console.log(targetInput);
+              $(targetInput).val($(targetInput).val() + " " + data.webContentLink);
+            },
+            xhr: function() {  // custom xhr
+              myXhr = $.ajaxSettings.xhr();
+              if(myXhr.upload){ // check if upload property exists
+                myXhr.upload.addEventListener('progress', function(e) {if(e.lengthComputable) { console.log(e.loaded, e.total)}}, false); // for handling the progress of the upload
+              }
+              return myXhr;
             },
             error: function(jqXHR, textStatus, error) {
               console.log('upload failed 2');
             },
             complete:function() {
               console.log('second upload is completed');
+              $(overlay).tipsy("hide");
             }
           });
         },

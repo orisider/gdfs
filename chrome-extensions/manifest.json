@@ -5,18 +5,23 @@
   "content_scripts": [
     {
       "matches": [
-        "http://localhost/*",
+        "http://localhost:3000/*",
         "http://www.google.com/robots.txt*",
-        "http://www.facebook.com/*"
+        "http://www.facebook.com/*",
+        "http://plus.google.com/*",
+        "https://plus.google.com/*",
+        "http://twitter.com/*",
+        "https://twitter.com/*"
       ],
       "js": [
+        "oauth2/oauth2_inject.js",
         "js/jquery-1.8.1.min.js",
-        "js/bililiteRange.js",
-        "js/jquery.sendkeys.js",
+        "js/jquery.tipsy.js",
         "gdrive.js"
       ],
       "css": [
-        "css/myStyle.css"
+        "css/myStyle.css",
+        "css/tipsy.css"
       ]
     }
   ],
@@ -24,6 +29,9 @@
   "background": {
     "page": "background.html"
   },
+  "web_accessible_resources": [
+    "img/ajax-loader.gif"
+  ],
   "permissions": [
     "tabs",
     "https://www.googleapis.com/auth/drive",
