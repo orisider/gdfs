@@ -7,7 +7,7 @@
 (function() {
   var oAuthToken;
   chrome.extension.sendRequest({type:'oauthToken'}, function(value) {
-    oAuthToken = "OAuth " + value;
+    oAuthToken = value;
     //console.log(oAuthToken);
   });
 
@@ -103,127 +103,80 @@
       var formData = new FormData();
       formData.append('file', blob, file.name);
 
-      var sessionUrl;
-      var gdSession = $.ajax({
-        url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=resumable',
-        type: 'POST',
-        headers: {
-          "Authorization": oAuthToken,
-          "X-Upload-Content-Type": file.type
-          //"X-Upload-Content-Length": blob.size
-        },
-        data: JSON.stringify({
-          "title": file.name
-        }),
-        cache: false,
-        contentType: 'application/json',
-        processData: false,
-        dataType: 'json',
-        success: function() {
-          sessionUrl = gdSession.getResponseHeader('location');
-          console.log('success');
+      hasGdfsFolder();
 
-          $.ajax({
-            url: sessionUrl,
-            type: 'PUT',
-            headers: {
-              "Authorization": oAuthToken
-            },
-            //data: formData,
-            data: file,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(data, textStatus, jqXHR) {
-              console.log('success to uploading2');
-              console.log(data);
-              console.log(data.webContentLink);
-              //$(target).sendkeys(data.webContentLink);
-              console.log(targetInput);
-              $(targetInput).val($(targetInput).val() + " " + data.webContentLink);
-            },
-            xhr: function() {  // custom xhr
-              myXhr = $.ajaxSettings.xhr();
-              if(myXhr.upload){ // check if upload property exists
-                myXhr.upload.addEventListener('progress', function(e) {if(e.lengthComputable) { console.log(e.loaded, e.total)}}, false); // for handling the progress of the upload
-              }
-              return myXhr;
-            },
-            error: function(jqXHR, textStatus, error) {
-              console.log('upload failed 2');
-            },
-            complete:function() {
-              console.log('second upload is completed');
-              $(overlay).tipsy("hide");
+      function hasGdfsFolder() {
+        $.ajax({
+          url: 'https://www.googleapis.com/drive/v2/files',
+          type: 'GET',
+          headers: {
+            "Authorization": "Bearer " + oAuthToken
+          },
+          data: {
+            "q": "title = 'gdfs' and mimeType = 'application/vnd.google-apps.folder' and trashed = false"
+          },
+          cache: false,
+          contentType: 'application/json',
+          processData: true,
+          dataType: 'json',
+          success: function(data, textStatus, jqXHR) {
+            console.log('sucess checking gdfs folder');
+            console.log(data);
+            if (data.items.length > 0) {
+              console.log('gdfs folder exist');
+              uploadFile(data.items[0].id);
+            } else {
+              console.log('gdfs folder doesn\'t exist');
+              createGdfsFolder();
             }
-          });
-        },
-        error: function(jqXHR, textStatus, error) {
-          console.log('upload failed');
-          console.log(jqXHR);
-          console.log(textStatus);
-          console.log(error);
-        },
-        complete: function() {
-        }
-      });
-    };
-    fileReader.onerror = function(e) {
-      console.log('onerror');
-      console.log(e);
-    };
-    fileReader.onloadend = function(e) {
-      console.log('onloadend');
-      console.log(e);
-    };
-    fileReader.readAsArrayBuffer(file);
-  }
+          },
+          error: function(jqXHR, textStatus, error) { },
+          complete: function() { }
+        });
+      }
 
+      function createGdfsFolder() {
+        $.ajax({
+          url: 'https://www.googleapis.com/drive/v2/files',
+          type: 'POST',
+          headers: {
+            "Authorization": "Bearer " + oAuthToken
+          },
+          data: JSON.stringify({
+            "title": "gdfs",
+            "mimeType": "application/vnd.google-apps.folder"
+          }),
+          cache: false,
+          contentType: 'application/json',
+          processData: false,
+          dataType: 'json',
+          success: function(data, textStatus, jqXHR) {
+            console.log('folder creaded');
+            console.log(data);
+            uploadFile(data.id);
+          },
+          error: function(jqXHR, textStatus, error) { },
+          complete: function() { }
+        });
+      }
 
-
-
-
-
-/*
-  var form = $('#fileForm');
-  if (form) {
-    form.submit(function(evt) {
-      evt.preventDefault();
-
-      var file = $('#file')[0].files[0];
-      if (!file) return; // No file selected
-
-      var fileReader = new FileReader();
-      fileReader.onload = function() {
-        console.log('file loaded');
-        var arraybuffer = fileReader.result;
-        // To manipulate an arraybuffer, wrap it in a view:
-        var view = new Uint8Array(arraybuffer);
-        view[0] = 0; // For example, change the first byte to a NULL-byte
-
-        // Create an object which is suitable for use with FormData
-        var blob = new Blob([view], {type: file.type});
-
-        // Now, the form reconstruction + upload part:
-        var formData = new FormData();
-        formData.append('file', blob, file.name);
-        console.log(file.name);
-        console.log(file.type);
-        console.log(blob.size);
-        // ... handle remainder of the form ...
-
+      function uploadFile(parentId) {
         var sessionUrl;
-
         var gdSession = $.ajax({
           url: 'https://www.googleapis.com/upload/drive/v2/files?uploadType=resumable',
           type: 'POST',
           headers: {
-            "Authorization": oAuthToken,
+            "Authorization": "OAuth " + oAuthToken,
             "X-Upload-Content-Type": file.type
             //"X-Upload-Content-Length": blob.size
           },
           data: JSON.stringify({
-            "title": file.name
+            "title": file.name,
+            "mimeType": file.type,
+            "parents": [{
+              "kind": "drive#fileLink",
+              "id": parentId
+            }]
           }),
           cache: false,
           contentType: 'application/json',
@@ -231,27 +184,40 @@
           dataType: 'json',
           success: function() {
             sessionUrl = gdSession.getResponseHeader('location');
-            console.log('success')
+            console.log('success');
 
             $.ajax({
               url: sessionUrl,
               type: 'PUT',
               headers: {
-                "Authorization": oAuthToken
+                "Authorization": "OAuth " + oAuthToken
               },
               //data: formData,
               data: file,
               cache: false,
               contentType: false,
               processData: false,
-              success: function() {
-                console.log('success to uploading');
+              success: function(data, textStatus, jqXHR) {
+                console.log('success to uploading2');
+                console.log(data);
+                console.log(data.webContentLink);
+                //$(target).sendkeys(data.webContentLink);
+                console.log(targetInput);
+                $(targetInput).val($(targetInput).val() + " " + data.webContentLink);
+              },
+              xhr: function() {  // custom xhr
+                myXhr = $.ajaxSettings.xhr();
+                if(myXhr.upload){ // check if upload property exists
+                  myXhr.upload.addEventListener('progress', function(e) {if(e.lengthComputable) { console.log(e.loaded, e.total)}}, false); // for handling the progress of the upload
+                }
+                return myXhr;
               },
               error: function(jqXHR, textStatus, error) {
                 console.log('upload failed 2');
               },
               complete:function() {
                 console.log('second upload is completed');
+                $(overlay).tipsy("hide");
               }
             });
           },
@@ -264,30 +230,16 @@
           complete: function() {
           }
         });
-
-        // Now, submit the form
-        //var xhr = new XMLHttpRequest();
-        //xhr.open('POST', 'https://www.googleapis.com/upload/drive/v2/files?uploadType=media');
-        //xhr.onload = function() {
-          // Do something. For example:
-         // console.log('xhr loaded');
-         // console.log(xhr.responseText);
-        //};
-        //xhr.onerror = function() {
-          //console.log('xhr error');
-          //console.log(xhr); // Aw. Error. Log xhr object for debugging
-        //}
-        //xhr.send(formData);
-      };
-      fileReader.onerror = function(e) {
-        console.log('onerror');
-        console.log(e);
-      };
-      fileReader.onloadend = function(e) {
-        console.log('onloadend');
-        console.log(e);
-      };
-      fileReader.readAsArrayBuffer(file);
-    });
-  }*/
+      }
+    };
+    fileReader.onerror = function(e) {
+      console.log('onerror');
+      console.log(e);
+    };
+    fileReader.onloadend = function(e) {
+      console.log('onloadend');
+      console.log(e);
+    };
+    fileReader.readAsArrayBuffer(file);
+  }
 })();
