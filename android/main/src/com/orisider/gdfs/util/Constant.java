@@ -20,6 +20,8 @@ public interface Constant {
 
     String BUNDLE_KEY_FILE_NAME = "file_name";
     String BUNDLE_KEY_FILE_SHARE_URL = "file_share_url" ;
+	String MIME_TYPE_DRIVE_FOLDER = "application/vnd.google-apps.folder";
+	String PARENT_ID_ROOT = "root";
 
 
 }

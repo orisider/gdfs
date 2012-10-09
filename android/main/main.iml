@@ -118,8 +118,10 @@
         <jarDirectory url="file://$MODULE_DIR$/libs" recursive="false" type="SOURCES" />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="android-support-v4" level="project" />
     <orderEntry type="module" module-name="lib_aFileChooser" />
+    <orderEntry type="module" module-name="lib_aFileChooser" />
+    <orderEntry type="module" module-name="lib_actionbar_sherlock" />
+    <orderEntry type="library" name="android-support-v4" level="project" />
   </component>
 </module>
 
