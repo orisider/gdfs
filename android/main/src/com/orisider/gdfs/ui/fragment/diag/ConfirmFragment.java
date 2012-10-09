@@ -1,4 +1,4 @@
-package com.orisider.gdfs.ui.fragment;
+package com.orisider.gdfs.ui.fragment.diag;
 
 import android.R;
 import android.app.AlertDialog;
@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogFragment;
 import com.google.inject.Inject;
-import com.orisider.gdfs.ui.event.GDFSDialogConfirm;
+import com.orisider.gdfs.ui.event.DialogConfirmEvent;
 import roboguice.event.EventManager;
 
 public class ConfirmFragment extends RoboSherlockDialogFragment {
@@ -32,17 +32,17 @@ public class ConfirmFragment extends RoboSherlockDialogFragment {
                 .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        evManager.fire(new GDFSDialogConfirm(true));
+                        evManager.fire(new DialogConfirmEvent(true));
                     }
                 }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        evManager.fire(new GDFSDialogConfirm(false));
+                        evManager.fire(new DialogConfirmEvent(false));
                     }
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        evManager.fire(new GDFSDialogConfirm(false));
+                        evManager.fire(new DialogConfirmEvent(false));
                     }
                 }).create();
     }

@@ -1,9 +1,9 @@
 package com.orisider.gdfs.ui.event;
 
-public class GDFSDialogConfirm {
+public class DialogConfirmEvent {
     public final boolean confirm;
 
-    public GDFSDialogConfirm(boolean confirm) {
+    public DialogConfirmEvent(boolean confirm) {
         this.confirm = confirm;
     }
 }

@@ -7,8 +7,8 @@ import android.support.v4.app.Fragment;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.ipaulpro.afilechooser.FileChooserFragment;
 import com.orisider.gdfs.R;
-import com.orisider.gdfs.ui.event.GDFSDialogConfirm;
-import com.orisider.gdfs.ui.fragment.ConfirmFragment;
+import com.orisider.gdfs.ui.event.DialogConfirmEvent;
+import com.orisider.gdfs.ui.fragment.diag.ConfirmFragment;
 import com.orisider.gdfs.util.Constant;
 import roboguice.event.Observes;
 
@@ -75,7 +75,7 @@ public class FileListActivity extends RoboSherlockFragmentActivity implements Fi
                 Constant.FRAG_TAG_DIALOG);
     }
 
-    private void onConfirmed(@Observes GDFSDialogConfirm confirmResult) {
+    private void onConfirmed(@Observes DialogConfirmEvent confirmResult) {
         if( confirmResult.confirm) {
             startService( new Intent().setAction(Constant.ACTION_DRIVE_UPLOAD).putExtra(Constant.FILE_URI
             , Uri.fromFile(selectedFile)));

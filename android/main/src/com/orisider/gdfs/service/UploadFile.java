@@ -11,7 +11,6 @@ import android.webkit.MimeTypeMap;
 import android.widget.Toast;
 import com.google.api.client.http.FileContent;
 import com.google.api.services.drive.Drive;
-import com.google.api.services.drive.model.FileList;
 import com.google.api.services.drive.model.ParentReference;
 import com.orisider.gdfs.GDFSApp;
 import com.orisider.gdfs.R;
@@ -57,9 +56,9 @@ public class UploadFile extends IntentService {
 
 
 		if (token == null) {
-			showAlert("user not authenticated");
+			showToast(R.string.warn_no_goog_account);
 		} else if (file == null) {
-			showAlert("file not found");
+			showToast(R.string.warn_no_file_found);
 		} else {
 			Drive gDrive = Util.newGDrive(token.accessToken);
 
@@ -70,7 +69,7 @@ public class UploadFile extends IntentService {
 				notiMgr.notify(NOTI_TAG, notiId,
 						new Notification.Builder(getApplicationContext())
 								.setSmallIcon(R.drawable.icon)
-								.setContentTitle("Uploading file to Google Drive")
+								.setContentTitle(getApplicationContext().getResources().getString(R.string.noti_title_upload))
 								.setContentText(file.getName())
 								.setProgress(100, 0, true)
 								.getNotification());
@@ -80,7 +79,7 @@ public class UploadFile extends IntentService {
 
 				com.google.api.services.drive.model.File uploadedFile = gDrive.files().insert(generateUploadFileInfo(file, gDrive, fileMimeType), new FileContent(fileMimeType, file)).execute();
 
-				showAlert("file uploaded!");
+				showToast(R.string.noti_title_upload_finish);
 
 				try {
 					uploadedFile = new GetWebContentLinkTask(getApplicationContext(), gDrive, uploadedFile.getId())
@@ -96,18 +95,18 @@ public class UploadFile extends IntentService {
 					Notification noti = new Notification.Builder(getApplicationContext())
 							.setSmallIcon(R.drawable.icon)
 							.setAutoCancel(true)
-							.setContentTitle("Upload finished")
+							.setContentTitle(getApplicationContext().getString(R.string.noti_title_upload_finish))
 							.setContentText(
 									uploadedFile.getWebContentLink()).setContentIntent(contentIntent).getNotification();
 
 					notiMgr.notify(NOTI_TAG, notiId, noti);
 				} catch (Exception e) {
-					showAlert("failed to get sharing url");
+					showToast(R.string.toast_share_url_fail);
 				}
 			} catch (IOException e) {
 				notiMgr.cancel(NOTI_TAG, notiId);
 				Log.w(Constant.LOG_TAG, "failed to upload file", e);
-				showAlert("failed to upload file");
+				showToast(R.string.toast_upload_fail);
 			}
 		}
 	}
@@ -138,11 +137,11 @@ public class UploadFile extends IntentService {
 		}
 	}
 
-	private void showAlert(final String msg) {
+	private void showToast(final int msgId) {
 		GDFSApp.handler.post(new Runnable() {
 			@Override
 			public void run() {
-				Toast.makeText(getApplicationContext(), "failed to upload file: " + msg,
+				Toast.makeText(getApplicationContext(), "GDFS: " + getApplicationContext().getResources().getString(msgId),
 						Toast.LENGTH_SHORT).show();
 			}
 		});

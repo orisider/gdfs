@@ -21,66 +21,66 @@ import com.orisider.gdfs.model.AccessToken;
 
 public class Util {
 
-    public static void showToast(int textResId) {
-        showToast(GDFSApp.ctx.getResources().getString(textResId));
-    }
+	public static void showToast(int textResId) {
+		showToast(GDFSApp.ctx.getResources().getString(textResId));
+	}
 
-    public static void showToast(String text) {
-        Toast.makeText(GDFSApp.ctx, text, Toast.LENGTH_SHORT).show();
-    }
+	public static void showToast(String text) {
+		Toast.makeText(GDFSApp.ctx, text, Toast.LENGTH_SHORT).show();
+	}
 
-    public static boolean isEmpty(String str) {
-        return str == null || str.trim().length() < 1;
-    }
+	public static boolean isEmpty(String str) {
+		return str == null || str.trim().length() < 1;
+	}
 
 
-    public static void getAccountToken(AccountManager acntMgr, final Account acnt, Activity act, Handler handler,
-                                       final AccessTokenCallback callback) {
-        acntMgr.getAuthToken(acnt, Constant.AUTH_TOKEN_TYPE, null, act, new AccountManagerCallback<Bundle>() {
-            @Override
-            public void run(AccountManagerFuture<Bundle> future) {
-                try {
-                    Bundle bundle = future.getResult();
-                    String authToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
+	public static void getAccountToken(AccountManager acntMgr, final Account acnt, Activity act, Handler handler,
+									   final AccessTokenCallback callback) {
+		acntMgr.getAuthToken(acnt, Constant.AUTH_TOKEN_TYPE, null, act, new AccountManagerCallback<Bundle>() {
+			@Override
+			public void run(AccountManagerFuture<Bundle> future) {
+				try {
+					Bundle bundle = future.getResult();
+					String authToken = bundle.getString(AccountManager.KEY_AUTHTOKEN);
 
-                    if (!Util.isEmpty(authToken)) {
-                        AccessToken token = new AccessToken(acnt.name, authToken);
-                        SessionStore.saveAccountAuthToken(token);
-                        callback.onTokenGetSuccess(token);
-                        return;
-                    }
+					if (!Util.isEmpty(authToken)) {
+						AccessToken token = new AccessToken(acnt.name, authToken);
+						SessionStore.saveAccountAuthToken(token);
+						callback.onTokenGetSuccess(token);
+						return;
+					}
 
-                    callback.onTokenGetFailed(new Exception("token is empty"));
-                } catch (Throwable e) {
-                    callback.onTokenGetFailed(e);
-                }
-            }
-        }, handler);
-    }
+					callback.onTokenGetFailed(new Exception("token is empty"));
+				} catch (Throwable e) {
+					callback.onTokenGetFailed(e);
+				}
+			}
+		}, handler);
+	}
 
-    public static interface AccessTokenCallback {
-        public void onTokenGetSuccess(AccessToken token);
+	public static interface AccessTokenCallback {
+		public void onTokenGetSuccess(AccessToken token);
 
-        public void onTokenGetFailed(Throwable e);
-    }
+		public void onTokenGetFailed(Throwable e);
+	}
 
-    public static Drive newGDrive(String accessToken) {
-        final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-        final JsonFactory jsonFactory = new AndroidJsonFactory();
+	public static Drive newGDrive(String accessToken) {
+		final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+		final JsonFactory jsonFactory = new AndroidJsonFactory();
 
-        String clientApiId = GDFSApp.ctx.getResources().getString(R.string.client_api_id);
-        String clientApiSecret = GDFSApp.ctx.getResources().getString(R.string.client_api_secret);
-        String simpleApiKey = GDFSApp.ctx.getResources().getString(R.string.simple_api_key);
+		String clientApiId = GDFSApp.ctx.getResources().getString(R.string.client_api_id);
+		String clientApiSecret = GDFSApp.ctx.getResources().getString(R.string.client_api_secret);
+		String simpleApiKey = GDFSApp.ctx.getResources().getString(R.string.simple_api_key);
 
-        GoogleCredential credential =
-                new GoogleCredential.Builder()
-                        .setClientSecrets(clientApiId, clientApiSecret).build();
+		GoogleCredential credential =
+				new GoogleCredential.Builder()
+						.setClientSecrets(clientApiId, clientApiSecret).build();
 
-        credential.setAccessToken(accessToken);
-        return new Drive.Builder(transport, jsonFactory, credential)
-                .setApplicationName(GDFSApp.ctx.getResources().getString(R.string.app_name))
-                .setJsonHttpRequestInitializer(new GoogleKeyInitializer(simpleApiKey))
-                .build();
-    }
+		credential.setAccessToken(accessToken);
+		return new Drive.Builder(transport, jsonFactory, credential)
+				.setApplicationName(GDFSApp.ctx.getResources().getString(R.string.app_name))
+				.setJsonHttpRequestInitializer(new GoogleKeyInitializer(simpleApiKey))
+				.build();
+	}
 
 }
