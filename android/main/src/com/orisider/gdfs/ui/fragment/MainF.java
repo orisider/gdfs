@@ -2,7 +2,10 @@ package com.orisider.gdfs.ui.fragment;
 
 import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +21,11 @@ import com.orisider.gdfs.util.Constant;
 import com.orisider.gdfs.util.SessionStore;
 import roboguice.inject.InjectView;
 
+import java.util.List;
+
 public class MainF extends RoboSherlockFragment implements View.OnClickListener {
 
+	public static final String PKG_GDRIVE = "com.google.android.apps.docs";
 	@InjectView(R.id.saved_acnt_name)
 	TextView savedAcntName;
 
@@ -67,7 +73,19 @@ public class MainF extends RoboSherlockFragment implements View.OnClickListener 
 	private void initView() {
 		acntBtn.setOnClickListener(this);
 		launchGdriveBtn.setOnClickListener(this);
+		launchGdriveBtn.setVisibility(isGdriveInstalled() ? View.VISIBLE : View.GONE);
 		aboutBtn.setOnClickListener(this);
+	}
+
+	private boolean isGdriveInstalled() {
+		List<ApplicationInfo> packages;
+		PackageManager pm = getActivity().getPackageManager();
+		packages = pm.getInstalledApplications(0);
+		for (ApplicationInfo packageInfo : packages) {
+			if (packageInfo.packageName.equals(PKG_GDRIVE))
+				return true;
+		}
+		return false;
 	}
 
 	private void updatePanel() {
@@ -92,10 +110,8 @@ public class MainF extends RoboSherlockFragment implements View.OnClickListener 
 				token = null;
 				updatePanel();
 			}
-
 		} else if (v == launchGdriveBtn) {
-			//TODO check gdrive installed
-			startActivity(new Intent().setComponent(new ComponentName("com.google.android.apps.docs", "com.google.android.apps.docs.app.NewMainProxyActivity")));
+			startActivity(new Intent().setComponent(new ComponentName(PKG_GDRIVE, "com.google.android.apps.docs.app.NewMainProxyActivity")));
 		} else if (v == aboutBtn) {
 			new AboutFragment().show(getActivity().getSupportFragmentManager(), Constant.FRAG_TAG_DIALOG);
 		}

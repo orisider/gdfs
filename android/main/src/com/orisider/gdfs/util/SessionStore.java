@@ -19,7 +19,7 @@ public class SessionStore {
      * get saved account info
      * @return account info. null if account info is not saved
      */
-    public static AccessToken getAccountAuthToken( )
+    public static AccessToken getAccountAuthToken()
     {
         SharedPreferences sf = getSF(GDFSApp.ctx);
         String accountName = sf.getString( KEY_ACCOUNT_NAME, null);
