@@ -42,6 +42,11 @@ public class MainActivity extends RoboSherlockFragmentActivity implements FileCh
 		if (savedInstanceState != null) {
 			selectedTabIndex = savedInstanceState.getInt(BUNDLE_KEY_SELECTED_TAB, 0);
 			selectedFile = (File) savedInstanceState.getSerializable(BUNDLE_KEY_SELECTED_FILE);
+
+			FileChooserFragment f = getFileChooseFragment();
+			if (f != null) {
+				f.setListener(this);
+			}
 		}
 
 		setTitle(DEFAULT_TITLE);
