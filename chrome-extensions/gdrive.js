@@ -9,6 +9,7 @@
   chrome.extension.sendRequest({type:'oauthToken'}, function(value) {
     oAuthToken = value;
     //console.log(oAuthToken);
+    //bgPage.googleAuth.hasAccessToken()
   });
 
   // distinguish the service
@@ -20,50 +21,54 @@
     }
   }
 
-  // initialize overlay for drop file
-  var overlay = $('<div>').addClass('gdnfOverlayForDnD').html('Drop file here');
-  $(document.body).append(overlay);
-  $(overlay).on('dragleave', overlayDragLeaveHandler);
-  $(overlay).on('drop', overlayDropHandler);
+  chrome.extension.sendRequest({type:'hasToken'}, function(value) {
+    if (value) {
+      // initialize overlay for drop file
+      var overlay = $('<div>').addClass('gdnfOverlayForDnD').html('Drop file here');
+      $(document.body).append(overlay);
+      $(overlay).on('dragleave', overlayDragLeaveHandler);
+      $(overlay).on('drop', overlayDropHandler);
 
-  // initialize tooltip
-  var tooltipMsg = '<div class="blue progress-bar"><div class="completion" id="gdfsProgressBar" style="width:0%"><strong>0%</strong></div></div>';
-  $.fn.tipsy.defaults = {
-    delayIn: 0,      // delay before showing tooltip (ms)
-    delayOut: 0,     // delay before hiding tooltip (ms)
-    fade: true,     // fade tooltips in/out?
-    fallback: '',    // fallback text to use when no tooltip text
-    gravity: 'n',    // gravity
-    html: true,     // is tooltip content HTML?
-    live: false,     // use live event support?
-    offset: 0,       // pixel offset of tooltip from element
-    opacity: 0.8,    // opacity of tooltip
-    title: function() {return tooltipMsg;},  // attribute/callback containing tooltip text
-    trigger: 'manual' // how tooltip is triggered - hover | focus | manual
-  };
+      // initialize tooltip
+      var tooltipMsg = '<div class="blue progress-bar"><div class="completion" id="gdfsProgressBar" style="width:0%"><strong>0%</strong></div></div>';
+      $.fn.tipsy.defaults = {
+        delayIn: 0,      // delay before showing tooltip (ms)
+        delayOut: 0,     // delay before hiding tooltip (ms)
+        fade: true,     // fade tooltips in/out?
+        fallback: '',    // fallback text to use when no tooltip text
+        gravity: 'n',    // gravity
+        html: true,     // is tooltip content HTML?
+        live: false,     // use live event support?
+        offset: 0,       // pixel offset of tooltip from element
+        opacity: 0.8,    // opacity of tooltip
+        title: function() {return tooltipMsg;},  // attribute/callback containing tooltip text
+        trigger: 'manual' // how tooltip is triggered - hover | focus | manual
+      };
 
-  $(overlay).tipsy();
+      $(overlay).tipsy();
 
-  // initialize drag event in text input place
-  var targetInput, targetAreas ;
-  var service = findService(location.href);
-  console.log('service: ', service);
-  if (service === 'facebook') {
-    targetAreas = $('textarea');
-  } else if (service === 'twitter') {
-    targetAreas = $('textarea.tweet-box');
-  }
+      // initialize drag event in text input place
+      var targetInput, targetAreas ;
+      var service = findService(location.href);
+      console.log('service: ', service);
+      if (service === 'facebook') {
+        targetAreas = $('textarea');
+      } else if (service === 'twitter') {
+        targetAreas = $('textarea.tweet-box');
+      }
 
-  targetAreas.live('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
-    $(overlay)
-      .width($(evt.target).outerWidth())
-      .height($(evt.target).outerHeight())
-      //.css('line-height', $(box).outerHeight())
-      .show();
+      targetAreas.live('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
+        $(overlay)
+          .width($(evt.target).outerWidth())
+          .height($(evt.target).outerHeight())
+          //.css('line-height', $(box).outerHeight())
+          .show();
 
-    $(overlay).offset($(evt.target).offset());
-    targetInput = evt.target;
-  }
+        $(overlay).offset($(evt.target).offset());
+        targetInput = evt.target;
+      }
+    }
+  });
 
   function overlayDragLeaveHandler(evt) {
     $(overlay).hide();

@@ -4,18 +4,22 @@ var googleAuth = new OAuth2('google', {
   api_scope: 'https://www.googleapis.com/auth/drive'
 });
 
-googleAuth.authorize(function() {
-  googleAuth.getAccessToken();
-});
+function login() {
+  googleAuth.authorize(function() {
+    googleAuth.getAccessToken();
+  });
+}
 
 function logout() {
   googleAuth.clearAccessToken();
 };
 
 chrome.extension.onRequest.addListener(function(request, sender, callback) {
-  if (request.type = 'oauthToken') {
+  if (request.type == 'oauthToken') {
     //callback(oauth.getAuthorizationHeader('https://www.googleapis.com/upload/drive/v2/files?uploadType=media', 'POST'));
     callback(googleAuth.getAccessToken());
     //callback(oauth.getAccessToken())
+  } else if (request.type == 'hasToken') {
+    callback(googleAuth.hasAccessToken());
   }
 });
