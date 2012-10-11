@@ -5,3 +5,6 @@ out
 bin
 local.properties
 api_key.xml
+*.apk
+Thumbs.db
+proguard_logs

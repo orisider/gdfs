@@ -9,8 +9,8 @@ import android.os.Handler;
 import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.orisider.gdfs.R;
 import com.orisider.gdfs.model.AccessToken;
-import com.orisider.gdfs.ui.event.DialogCanceledEvent;
-import com.orisider.gdfs.ui.event.ItemSelectedEvent;
+import com.orisider.gdfs.ui.event.GDFSDialogCanceledEvent;
+import com.orisider.gdfs.ui.event.GDFSItemSelectedEvent;
 import com.orisider.gdfs.ui.fragment.diag.AccountChooseFragment;
 import com.orisider.gdfs.ui.fragment.diag.LoadingFragment;
 import com.orisider.gdfs.util.Constant;
@@ -80,12 +80,12 @@ public class GetAccountActivity extends RoboSherlockFragmentActivity {
 	}
 
 	@SuppressWarnings("UnusedDeclaration")
-	private void onItemSelected(@Observes ItemSelectedEvent e) {
+	private void onItemSelected(@Observes GDFSItemSelectedEvent e) {
 		processAccountSelected(accounts[Integer.parseInt(e.selectedValue)]);
 	}
 
 	@SuppressWarnings("UnusedDeclaration")
-	private void onDialogCanceled(@Observes DialogCanceledEvent e) {
+	private void onDialogCanceled(@Observes GDFSDialogCanceledEvent e) {
 		finish();
 	}
 }

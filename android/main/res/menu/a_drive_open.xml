@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/copy_to_clipboard"
+          android:icon="@drawable/ic_menu_copy_holo_dark"
+          android:title="@string/btn_copy_clipboard"
+          android:showAsAction="always"/>
+    <item android:id="@+id/share"
+          android:icon="@drawable/ic_menu_share_holo_dark"
+          android:title="@string/share"
+          android:showAsAction="always"/>
+
+</menu>

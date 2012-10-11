@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/launch_gdrive"
+            android:showAsAction="always"
+            android:icon="@drawable/drive_icon_mono"
+            android:title="@string/btn_launch_goog_drv"
+            />
+    <item android:id="@+id/about"
+          android:showAsAction="always"
+          android:icon="@drawable/ic_menu_info_details"
+          android:title="@string/btn_about"
+            />
+</menu>

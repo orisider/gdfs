@@ -1,13 +1,12 @@
 package com.orisider.gdfs.ui.fragment.diag;
 
-import android.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogFragment;
 import com.google.inject.Inject;
-import com.orisider.gdfs.ui.event.DialogConfirmEvent;
+import com.orisider.gdfs.ui.event.GDFSDialogConfirmEvent;
 import roboguice.event.EventManager;
 
 public class ConfirmFragment extends RoboSherlockDialogFragment {
@@ -29,20 +28,20 @@ public class ConfirmFragment extends RoboSherlockDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity()).setMessage(getArguments().getString(ARG_MESSAGE))
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        evManager.fire(new DialogConfirmEvent(true));
+                        evManager.fire(new GDFSDialogConfirmEvent(true));
                     }
-                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        evManager.fire(new DialogConfirmEvent(false));
+                        evManager.fire(new GDFSDialogConfirmEvent(false));
                     }
                 }).setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialog) {
-                        evManager.fire(new DialogConfirmEvent(false));
+                        evManager.fire(new GDFSDialogConfirmEvent(false));
                     }
                 }).create();
     }

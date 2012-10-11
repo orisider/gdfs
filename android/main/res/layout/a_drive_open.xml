@@ -2,7 +2,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
-              style="@style/view_mm" android:padding="20dp">
+              style="@style/view_mm" >
 
     <TextView style="@style/tv_label"
               android:text="@string/label_file_name"/>
@@ -12,10 +12,4 @@
               android:text="@string/label_share_url"/>
     <TextView style="@style/tv_value"
               android:id="@+id/share_url"/>
-
-    <Button android:id="@+id/copy_clipboard_btn"
-            style="@style/view_ww"
-            android:layout_gravity="center_horizontal"
-            android:text="@string/btn_copy_clipboard"
-            android:layout_marginTop="20dp"/>
 </LinearLayout>

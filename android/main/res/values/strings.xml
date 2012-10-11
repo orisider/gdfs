@@ -3,7 +3,7 @@
     <string name="app_name">GDFS</string>
     <string name="title_file_info">파일 공유</string>
     <string name="tab_home">홈</string>
-    <string name="loading">로딩...</string>
+    <string name="loading">로딩&#8230;</string>
     <string name="share">공유</string>
     <string name="acnt_empty">계정 정보 없음</string>
     <string name="tab_explorer">탐색기</string>
@@ -19,7 +19,8 @@
     <string name="toast_upload_fail">업로드에 실패했습니다.</string>
     <string name="label_file_name">파일명:</string>
     <string name="label_share_url">공유 URL:</string>
-    <string name="toast_upload_start">업로드를 시작합니다.</string>
+    <string name="noti_ticker_upload_start">업로드를 시작합니다.</string>
+    <string name="noti_ticker_upload_finish">업로드에 성공했습니다.</string>
     <string name="btn_copy_clipboard">클립보드로 복사</string>
     <string name="url_copied_to_clipboard">URL을 클립보드로 복사했습니다.</string>
     <string name="label_goog_account">구글 계정:</string>
@@ -30,4 +31,5 @@
 
     <string name="about_content">GDFS(Google Drive File Share)는 구글 드라이브를 이용해 손쉽게 파일을 공유할 수 있는 앱입니다.\n\nGDFS를 이용하면 구글 드라이브에 업로드된 파일의 링크를 전달하여 친구/동료와 손쉽게 파일을 공유할 수 있습니다.\n공유된 파일은 구글 드라이브 상에 존재하며, 익명 접근을 허용하도록 설정됩니다.\n\nGDFS는 1) 내부 탐색기를 이용해 직접 파일을 업로드하는 기능과 2) 구글 드라이브 앱과 연동하여 업로드 된 파일의 공유 링크를 생성하는 기능을 제공합니다.
     </string>
+    <string name="google_drive">Google Drive</string>
 </resources>

@@ -7,17 +7,15 @@ import android.os.Bundle;
 import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockDialogFragment;
 import com.google.inject.Inject;
 import com.orisider.gdfs.R;
-import com.orisider.gdfs.ui.event.DialogCanceledEvent;
-import com.orisider.gdfs.ui.event.ItemSelectedEvent;
+import com.orisider.gdfs.ui.event.GDFSDialogCanceledEvent;
+import com.orisider.gdfs.ui.event.GDFSItemSelectedEvent;
 import roboguice.event.EventManager;
 
 public class AccountChooseFragment extends RoboSherlockDialogFragment implements DialogInterface.OnClickListener {
 
 	@Inject
-	EventManager evManager;
-
-	String[] accounts;
-
+	private EventManager evManager=null;
+	private String[] accounts;
 	private static final String BUNDLE_KEY_ACCOUNTS = "accounts";
 
 	public static AccountChooseFragment newInstance(String[] accountNames) {
@@ -45,12 +43,12 @@ public class AccountChooseFragment extends RoboSherlockDialogFragment implements
 
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
-		evManager.fire(new ItemSelectedEvent(Integer.toString(which)));
+		evManager.fire(new GDFSItemSelectedEvent(Integer.toString(which)));
 	}
 
 	@Override
 	public void onCancel(DialogInterface dialog) {
 		super.onCancel(dialog);
-		evManager.fire(new DialogCanceledEvent());
+		evManager.fire(new GDFSDialogCanceledEvent());
 	}
 }

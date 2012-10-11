@@ -1,10 +1,10 @@
 package com.orisider.gdfs.ui.event;
 
-public class ItemSelectedEvent {
+public class GDFSItemSelectedEvent {
 
 	public final String selectedValue;
 
-	public ItemSelectedEvent(String selectedValue) {
+	public GDFSItemSelectedEvent(String selectedValue) {
 		this.selectedValue = selectedValue;
 	}
 }

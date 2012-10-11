@@ -3,7 +3,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               style="@style/view_mm"
               android:orientation="vertical"
-              android:padding="20dp"
               android:gravity="top|center_horizontal"
         >
 
@@ -11,28 +10,31 @@
               android:text="@string/label_goog_account"
             />
     <RelativeLayout style="@style/view_mw"
+                    android:paddingTop="5dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
             >
         <TextView android:id="@+id/saved_acnt_name"
                   style="@style/tv_value"
+                  android:paddingLeft="0dp"
+                  android:paddingTop="10dp"
                   android:layout_width="wrap_content"
                   android:paddingRight="120dp"
-                  android:text="aaa"
+
                   android:layout_centerVertical="true" android:layout_alignParentLeft="true"/>
         <Button android:id="@+id/set_acnt_btn"
                 style="@style/view_ww"
                 android:layout_centerVertical="true"
+                android:layout_alignBaseline="@+id/saved_acnt_name"
                 android:layout_alignRight="@+id/saved_acnt_name"
                 />
     </RelativeLayout>
 
-    <Button android:id="@+id/launch_gdrive_btn"
-            style="@style/view_ww"
-            android:layout_margin="20dp"
-            android:text="@string/btn_launch_goog_drv"/>
-
-    <Button android:id="@+id/about_btn"
-            style="@style/view_ww"
-            android:layout_margin="20dp"
-            android:text="@string/btn_about"/>
-
+    <ImageView style="@style/view_mw"
+               android:layout_marginTop="100dp"
+               android:src="@drawable/drive_app_badge"
+               android:adjustViewBounds="true"
+               android:scaleType="fitCenter"
+               android:layout_gravity="center_horizontal|top"
+            android:contentDescription="@string/google_drive"/>
 </LinearLayout>

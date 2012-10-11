@@ -12,6 +12,7 @@ public class AboutFragment extends RoboSherlockDialogFragment {
 		Dialog diag = new Dialog(getActivity());
 		diag.setTitle(R.string.about_title);
 		diag.setContentView(R.layout.f_about);
+        diag.setCanceledOnTouchOutside(true);
 		return diag;
 	}
 }

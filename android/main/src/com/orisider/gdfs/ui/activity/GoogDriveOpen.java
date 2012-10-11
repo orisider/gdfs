@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ShareCompat;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -27,25 +25,19 @@ import com.orisider.gdfs.util.Util;
 import roboguice.inject.InjectView;
 
 public class GoogDriveOpen extends RoboSherlockFragmentActivity {
-	private static final int MENU_ID_SHARE = 1;
 	private static final String BUNDLE_KEY_INTENT = "intent";
 	/**
 	 * Drive file ID key.
 	 */
-	String EXTRA_FILE_ID = "resourceId";
-
-	AccessToken token;
+	private static final String EXTRA_FILE_ID = "resourceId";
+    private AccessToken token;
 
 	@InjectView(R.id.file_name)
-	TextView fileName;
-
+    private TextView fileName;
 	@InjectView(R.id.share_url)
-	TextView shareUrl;
+    private TextView shareUrl;
 
-	@InjectView(R.id.copy_clipboard_btn)
-	Button copyToClipboard;
-
-	Intent intent;
+    private Intent intent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +47,6 @@ public class GoogDriveOpen extends RoboSherlockFragmentActivity {
 
 		ActionBar actionbar = getSupportActionBar();
 		actionbar.setDisplayHomeAsUpEnabled(true);
-
-
-		copyToClipboard.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				ClipboardManager mgr = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-				mgr.setPrimaryClip(ClipData.newPlainText("goog_drive_file_url", shareUrl.getText()));
-				Util.showToast(R.string.url_copied_to_clipboard);
-			}
-		});
 
 		if (savedInstanceState == null) {
 			intent = getIntent();
@@ -110,24 +92,29 @@ public class GoogDriveOpen extends RoboSherlockFragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuItem shareItem = menu.add(Menu.NONE, MENU_ID_SHARE, 0, R.string.share);
-		shareItem.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-		shareItem.setIcon(R.drawable.ic_menu_share_holo_dark);
+        getSupportMenuInflater().inflate(R.menu.a_drive_open, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == MENU_ID_SHARE) {
-			Intent shareIntent = ShareCompat.IntentBuilder.from(GoogDriveOpen.this)
-					.setText(shareUrl.getText().toString())
-					.setType("text/plain")
-					.getIntent();
-			startActivity(shareIntent);
-		} else if( item.getItemId() == android.R.id.home) {
-			startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-		}
-
+        switch( item.getItemId()) {
+            case R.id.share:
+                Intent shareIntent = ShareCompat.IntentBuilder.from(GoogDriveOpen.this)
+                        .setText(shareUrl.getText().toString())
+                        .setType("text/plain")
+                        .getIntent();
+                startActivity(shareIntent);
+                break;
+            case android.R.id.home:
+                startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                break;
+            case R.id.copy_to_clipboard:
+                ClipboardManager mgr = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                mgr.setPrimaryClip(ClipData.newPlainText("goog_drive_file_url", shareUrl.getText()));
+                Util.showToast(R.string.url_copied_to_clipboard);
+                break;
+        }
 		return true;
 	}
 
