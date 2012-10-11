@@ -15,8 +15,6 @@
   function findService(url) {
     if (url.match(/facebook/g)) {
       return "facebook";
-    } else if (url.match(/goolge/g)) {
-      return "gplus";
     } else if (url.match(/twitter/g)) {
       return "twitter"
     }
@@ -29,7 +27,6 @@
   $(overlay).on('drop', overlayDropHandler);
 
   // initialize tooltip
-  //var tooltipMsg = '<img src="' + chrome.extension.getURL('img/ajax-loader.gif') + '">';
   var tooltipMsg = '<div class="blue progress-bar"><div class="completion" id="gdfsProgressBar" style="width:0%"><strong>0%</strong></div></div>';
   $.fn.tipsy.defaults = {
     delayIn: 0,      // delay before showing tooltip (ms)
@@ -48,23 +45,23 @@
   $(overlay).tipsy();
 
   // initialize drag event in text input place
-  var targetInput;
+  var targetInput, targetAreas ;
   var service = findService(location.href);
   console.log('service: ', service);
   if (service === 'facebook') {
-    var targetAreas = $('textarea');
-    targetAreas.on('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
-      $(overlay)
-        .width($(evt.target).outerWidth())
-        .height($(evt.target).outerHeight())
-        //.css('line-height', $(box).outerHeight())
-        .show();
-
-      $(overlay).offset($(evt.target).offset());
-      targetInput = evt.target;
-    }
-  } else if (service === 'gplus') {
+    targetAreas = $('textarea');
   } else if (service === 'twitter') {
+  }
+
+  targetAreas.on('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
+    $(overlay)
+      .width($(evt.target).outerWidth())
+      .height($(evt.target).outerHeight())
+      //.css('line-height', $(box).outerHeight())
+      .show();
+
+    $(overlay).offset($(evt.target).offset());
+    targetInput = evt.target;
   }
 
   function overlayDragLeaveHandler(evt) {
