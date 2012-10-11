@@ -51,9 +51,10 @@
   if (service === 'facebook') {
     targetAreas = $('textarea');
   } else if (service === 'twitter') {
+    targetAreas = $('textarea.tweet-box');
   }
 
-  targetAreas.on('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
+  targetAreas.live('dragenter', dragEnterHandler);  function dragEnterHandler(evt) {
     $(overlay)
       .width($(evt.target).outerWidth())
       .height($(evt.target).outerHeight())
