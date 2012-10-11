@@ -1,7 +1,10 @@
 {
-  "name": "GDFS (Google Drive File Sharing",
+  "name": "GDFS",
   "manifest_version": 2,
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "icons": { "16": "img/16x16.png",
+    "48": "img/48x48.png",
+    "128": "img/128x128.png" },
   "content_scripts": [
     {
       "matches": [

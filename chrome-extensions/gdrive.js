@@ -19,10 +19,11 @@
     }
   }
 
+  var overlay, targetInput, targetAreas ;
   chrome.extension.sendRequest({type:'hasToken'}, function(value) {
     if (value) {
       // initialize overlay for drop file
-      var overlay = $('<div>').addClass('gdnfOverlayForDnD').html('Drop file here');
+      overlay = $('<div>').addClass('gdnfOverlayForDnD').html('Drop file here');
       $(document.body).append(overlay);
       $(overlay).on('dragleave', overlayDragLeaveHandler);
       $(overlay).on('drop', overlayDropHandler);
@@ -46,7 +47,6 @@
       $(overlay).tipsy();
 
       // initialize drag event in text input place
-      var targetInput, targetAreas ;
       var service = findService(location.href);
       if (service === 'facebook') {
         targetAreas = $('textarea');
