@@ -16,9 +16,7 @@ function logout() {
 
 chrome.extension.onRequest.addListener(function(request, sender, callback) {
   if (request.type == 'oauthToken') {
-    //callback(oauth.getAuthorizationHeader('https://www.googleapis.com/upload/drive/v2/files?uploadType=media', 'POST'));
     callback(googleAuth.getAccessToken());
-    //callback(oauth.getAccessToken())
   } else if (request.type == 'hasToken') {
     callback(googleAuth.hasAccessToken());
   }

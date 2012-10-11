@@ -8,8 +8,6 @@
   var oAuthToken;
   chrome.extension.sendRequest({type:'oauthToken'}, function(value) {
     oAuthToken = value;
-    //console.log(oAuthToken);
-    //bgPage.googleAuth.hasAccessToken()
   });
 
   // distinguish the service
@@ -50,7 +48,6 @@
       // initialize drag event in text input place
       var targetInput, targetAreas ;
       var service = findService(location.href);
-      console.log('service: ', service);
       if (service === 'facebook') {
         targetAreas = $('textarea');
       } else if (service === 'twitter') {
@@ -80,7 +77,6 @@
 
     var files = evt.dataTransfer.files;
     if (files.length > 0) {
-      console.log(files);
       uploadFileToGDrive(files[0]);
 
       $(overlay).tipsy("show");
@@ -94,7 +90,6 @@
 
     var fileReader = new FileReader();
     fileReader.onload = function() {
-      console.log('file loaded');
       var arraybuffer = fileReader.result;
 
       var view = new Uint8Array(arraybuffer);
@@ -124,18 +119,15 @@
           processData: true,
           dataType: 'json',
           success: function(data, textStatus, jqXHR) {
-            console.log('sucess checking gdfs folder');
-            console.log(data);
             if (data.items.length > 0) {
-              console.log('gdfs folder exist');
               uploadFile(data.items[0].id);
             } else {
-              console.log('gdfs folder doesn\'t exist');
               createGdfsFolder();
             }
           },
-          error: function(jqXHR, textStatus, error) { },
-          complete: function() { }
+          error: function(jqXHR, textStatus, error) {
+            $(overlay).tipsy("hide");
+          }
         });
       }
 
@@ -155,12 +147,11 @@
           processData: false,
           dataType: 'json',
           success: function(data, textStatus, jqXHR) {
-            console.log('folder creaded');
-            console.log(data);
             uploadFile(data.id);
           },
-          error: function(jqXHR, textStatus, error) { },
-          complete: function() { }
+          error: function(jqXHR, textStatus, error) {
+            $(overlay).tipsy("hide");
+          }
         });
       }
 
@@ -188,7 +179,6 @@
           dataType: 'json',
           success: function() {
             sessionUrl = gdSession.getResponseHeader('location');
-            console.log('success');
 
             $.ajax({
               url: sessionUrl,
@@ -196,17 +186,11 @@
               headers: {
                 "Authorization": "OAuth " + oAuthToken
               },
-              //data: formData,
               data: file,
               cache: false,
               contentType: false,
               processData: false,
               success: function(data, textStatus, jqXHR) {
-                console.log('success to uploading2');
-                console.log(data);
-                console.log(data.webContentLink);
-                //$(target).sendkeys(data.webContentLink);
-                console.log(targetInput);
                 $(targetInput).val($(targetInput).val() + " " + data.webContentLink);
               },
               xhr: function() {  // custom xhr
@@ -214,9 +198,7 @@
                 if(myXhr.upload){ // check if upload property exists
                   myXhr.upload.addEventListener('progress', function(e) {
                     if(e.lengthComputable) {
-                      console.log(e.loaded, e.total)
                       var percentage = Math.floor(e.loaded / e.total * 100) + "%";
-                      console.log(percentage);
                       $('#gdfsProgressBar').css('width', percentage).find('strong').html(percentage);
                     }
                   }, false); // for handling the progress of the upload
@@ -224,32 +206,23 @@
                 return myXhr;
               },
               error: function(jqXHR, textStatus, error) {
-                console.log('upload failed 2');
+                $(overlay).tipsy("hide");
               },
               complete:function() {
-                console.log('second upload is completed');
                 $(overlay).tipsy("hide");
               }
             });
           },
           error: function(jqXHR, textStatus, error) {
-            console.log('upload failed');
-            console.log(jqXHR);
-            console.log(textStatus);
-            console.log(error);
-          },
-          complete: function() {
+            $(overlay).tipsy("hide");
           }
         });
       }
     };
     fileReader.onerror = function(e) {
-      console.log('onerror');
-      console.log(e);
+      $(overlay).tipsy("hide");
     };
     fileReader.onloadend = function(e) {
-      console.log('onloadend');
-      console.log(e);
     };
     fileReader.readAsArrayBuffer(file);
   }
