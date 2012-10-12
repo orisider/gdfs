@@ -186,7 +186,7 @@ public class UploadFile extends IntentService {
 
     private String createOrGetGdfsFolder(Drive gDrive) throws IOException {
         Drive.Files.List files = gDrive.files().list().setQ("title = 'gdfs' and mimeType = '" + Constant
-                .MIME_TYPE_DRIVE_FOLDER + "'");
+                .MIME_TYPE_DRIVE_FOLDER + "' and trashed = false");
         List<com.google.api.services.drive.model.File> fileList = files.execute().getItems();
         if (fileList.isEmpty()) {
             //create gdfs folder
