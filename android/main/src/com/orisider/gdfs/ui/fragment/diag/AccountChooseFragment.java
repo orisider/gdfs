@@ -10,8 +10,9 @@ import com.orisider.gdfs.R;
 import com.orisider.gdfs.ui.event.GDFSDialogCanceledEvent;
 import com.orisider.gdfs.ui.event.GDFSItemSelectedEvent;
 import roboguice.event.EventManager;
+import roboguice.fragment.RoboDialogFragment;
 
-public class AccountChooseFragment extends RoboSherlockDialogFragment implements DialogInterface.OnClickListener {
+public class AccountChooseFragment extends RoboDialogFragment implements DialogInterface.OnClickListener {
 
 	@Inject
 	private EventManager evManager=null;

@@ -45,21 +45,21 @@ public class MainActivity extends RoboSherlockFragmentActivity implements FileCh
         ab.setDisplayHomeAsUpEnabled(false);
         ab.setDisplayShowHomeEnabled(true);
 
-        if (savedInstanceState != null) {
-            selectedTabIndex = savedInstanceState.getInt(BUNDLE_KEY_SELECTED_TAB, 0);
-            selectedFile = (File) savedInstanceState.getSerializable(BUNDLE_KEY_SELECTED_FILE);
-
-            FileChooserFragment f = getFileChooseFragment();
-            if (f != null) {
-                f.setListener(this);
-            }
-        }
 
         setTitle(DEFAULT_TITLE);
-
         setContentView(R.layout.a_main);
 
-        initTab();
+		initTab();
+
+		if (savedInstanceState != null) {
+			selectedTabIndex = savedInstanceState.getInt(BUNDLE_KEY_SELECTED_TAB, 0);
+			selectedFile = (File) savedInstanceState.getSerializable(BUNDLE_KEY_SELECTED_FILE);
+
+			FileChooserFragment f = getFileChooseFragment();
+			if (f != null) {
+				f.setListener(this);
+			}
+		}
     }
 
     @Override
@@ -177,6 +177,7 @@ public class MainActivity extends RoboSherlockFragmentActivity implements FileCh
     }
 
     private FileChooserFragment getFileChooseFragment() {
+
         return (FileChooserFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + pager.getId
                 () + ":1");
     }

@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import com.github.rtyley.android.sherlock.roboguice.activity.RoboSherlockFragmentActivity;
 import com.orisider.gdfs.R;
 import com.orisider.gdfs.model.AccessToken;
 import com.orisider.gdfs.ui.event.GDFSDialogCanceledEvent;
@@ -15,9 +14,10 @@ import com.orisider.gdfs.ui.fragment.diag.AccountChooseFragment;
 import com.orisider.gdfs.ui.fragment.diag.LoadingFragment;
 import com.orisider.gdfs.util.Constant;
 import com.orisider.gdfs.util.Util;
+import roboguice.activity.RoboFragmentActivity;
 import roboguice.event.Observes;
 
-public class GetAccountActivity extends RoboSherlockFragmentActivity {
+public class GetAccountActivity extends RoboFragmentActivity {
 	private AccountManager accountManager;
 	private Account[] accounts;
 

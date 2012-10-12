@@ -30,14 +30,14 @@ public class GoogDriveOpen extends RoboSherlockFragmentActivity {
 	 * Drive file ID key.
 	 */
 	private static final String EXTRA_FILE_ID = "resourceId";
-    private AccessToken token;
+	private AccessToken token;
 
 	@InjectView(R.id.file_name)
-    private TextView fileName;
+	private TextView fileName;
 	@InjectView(R.id.share_url)
-    private TextView shareUrl;
+	private TextView shareUrl;
 
-    private Intent intent;
+	private Intent intent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,29 +92,32 @@ public class GoogDriveOpen extends RoboSherlockFragmentActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-        getSupportMenuInflater().inflate(R.menu.a_drive_open, menu);
+		getSupportMenuInflater().inflate(R.menu.a_drive_open, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-        switch( item.getItemId()) {
-            case R.id.share:
-                Intent shareIntent = ShareCompat.IntentBuilder.from(GoogDriveOpen.this)
-                        .setText(shareUrl.getText().toString())
-                        .setType("text/plain")
-                        .getIntent();
-                startActivity(shareIntent);
-                break;
-            case android.R.id.home:
-                startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                break;
-            case R.id.copy_to_clipboard:
-                ClipboardManager mgr = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                mgr.setPrimaryClip(ClipData.newPlainText("goog_drive_file_url", shareUrl.getText()));
-                Util.showToast(R.string.url_copied_to_clipboard);
-                break;
-        }
+		switch (item.getItemId()) {
+			case R.id.share:
+				Intent shareIntent = ShareCompat.IntentBuilder.from(GoogDriveOpen.this)
+						.setText(shareUrl.getText().toString())
+						.setType("text/plain")
+						.getIntent();
+				startActivity(shareIntent);
+				break;
+			case android.R.id.home:
+				startActivity(new Intent(getApplicationContext(), MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+				break;
+			case R.id.copy_to_clipboard:
+				if (Util.hasHoneycomb()) {
+					ClipboardUtilPostHoneyComb.copy(getApplicationContext(), shareUrl.getText().toString());
+				} else {
+					ClipboardUtilPreHoneyComb.copy(getApplicationContext(), shareUrl.getText().toString());
+				}
+
+				break;
+		}
 		return true;
 	}
 
@@ -174,5 +177,22 @@ public class GoogDriveOpen extends RoboSherlockFragmentActivity {
 		fm.beginTransaction().remove(fm.findFragmentByTag(Constant.FRAG_TAG_DIALOG)).commit();
 	}
 
+	private static class ClipboardUtilPostHoneyComb {
+		public static void copy(Context ctx, String shareUrl) {
+			ClipboardManager mgr = (ClipboardManager) ctx.getSystemService(Context.CLIPBOARD_SERVICE);
+			mgr.setPrimaryClip(ClipData.newPlainText("goog_drive_file_url", shareUrl));
+			Util.showToast(R.string.url_copied_to_clipboard);
 
+		}
+	}
+
+	private static class ClipboardUtilPreHoneyComb {
+		public static void copy(Context ctx, String shareUrl) {
+			android.text.ClipboardManager clipboard = (android.text.ClipboardManager) ctx
+					.getSystemService(Context.CLIPBOARD_SERVICE);
+			if (clipboard != null) {
+				clipboard.setText(shareUrl);
+			}
+		}
+	}
 }
