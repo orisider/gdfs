@@ -5,6 +5,7 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
@@ -13,7 +14,10 @@ import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
 import com.google.api.client.googleapis.services.GoogleKeyInitializer;
 import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.drive.Drive;
 import com.orisider.gdfs.GDFSApp;
 import com.orisider.gdfs.R;
@@ -65,8 +69,14 @@ public class Util {
 	}
 
 	public static Drive newGDrive(String accessToken) {
-		final HttpTransport transport = AndroidHttp.newCompatibleTransport();
-		final JsonFactory jsonFactory = new AndroidJsonFactory();
+//		final HttpTransport transport = AndroidHttp.newCompatibleTransport();
+		final HttpTransport transport = new NetHttpTransport();
+		final JsonFactory jsonFactory;
+		if( hasHoneycomb()) {
+			jsonFactory = new AndroidJsonFactory();
+		} else {
+			jsonFactory =new JacksonFactory();
+		}
 
 		String clientApiId = GDFSApp.ctx.getResources().getString(R.string.client_api_id);
 		String clientApiSecret = GDFSApp.ctx.getResources().getString(R.string.client_api_secret);
@@ -83,4 +93,7 @@ public class Util {
 				.build();
 	}
 
+	public static boolean hasHoneycomb() {
+		return Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+	}
 }
