@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              style="@style/view_mm" >
+
+    <TextView style="@style/tv_label"
+              android:text="@string/label_file_name"/>
+    <TextView style="@style/tv_value"
+              android:id="@+id/file_name"/>
+    <TextView style="@style/tv_label"
+              android:text="@string/label_share_url"/>
+    <TextView style="@style/tv_value"
+              android:id="@+id/share_url"/>
+</LinearLayout>

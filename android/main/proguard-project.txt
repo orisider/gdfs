@@ -1,0 +1,151 @@
+# To enable ProGuard in your project, edit project.properties
+# to define the proguard.config property as described in that file.
+#
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the ProGuard
+# include property in project.properties.
+#
+# For more details, see
+#   http://developer.android.com/guide/developing/tools/proguard.html
+
+# Add any project specific keep options here:
+
+# If your project uses WebView with JS, uncomment the following
+# and specify the fully qualified class name to the JavaScript interface
+# class:
+#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
+#   public *;
+#}
+
+
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class android.support.v4.content.** { *; }
+-keep interface android.support.v4.content.** { *; }
+-keep class com.actionbarsherlock.** { *; }
+-keep interface com.actionbarsherlock.** { *; }
+-keep public class com.android.vending.licensing.ILicensingService
+
+-keep class com.google.inject.** { *; }
+-keep,allowobfuscation public class com.google.inject.name.Named
+-keep,allowobfuscation public class * implements com.google.inject.Provider
+-keep,allowobfuscation @com.google.inject.Provides class *
+-keep,allowobfuscation @com.google.inject.Provides class *
+-keep,allowobfuscation @com.google.inject.ProvidedBy class *
+-keep,allowobfuscation @com.google.inject.Singleton class *
+-keep,allowobfuscation @com.google.inject.BindingAnnotation class *
+-keep,allowobfuscation @com.google.inject.ScopeAnnotation class *
+
+-keepclassmembers class com.google.inject.Inject {
+    public boolean optional();
+}
+
+-keep class com.google.inject.Binder
+
+-keep public class roboguice.** { *; }
+
+-keep class **.Finalizer
+-keepclassmembers class ** { *** startFinalizer( ... ); }
+
+-keepclassmembers class * {
+  void *(**On*Event);
+}
+
+-keepclassmembers class * {
+  void *(**GDFS*Event);
+}
+
+-keepclassmembers class * {
+    @com.google.inject.Inject <init>(...);
+    @com.google.inject.Inject <fields>;
+}
+
+-keepclassmembers class com.google.inject.Inject {
+    public boolean optional();
+}
+
+-keepclasseswithmembernames class * {
+    native <methods>;
+    public <init>(android.content.Context, android.util.AttributeSet);
+    public <init>(android.content.Context, android.util.AttributeSet, int);
+    public void set*(...);
+}
+
+
+-keepattributes *Annotation*,Signature
+
+-keep class com.google.gson.**
+-dontnote com.springframework.**
+-dontwarn org.codehaus.**
+-dontwarn org.apache.commons.**
+-dontwarn roboguice.test.**
+-dontwarn org.simpleframework.**
+-dontwarn com.google.code.rome.**
+-dontwarn com.google.android.apps.**
+-dontwarn com.google.vending.**
+-dontwarn com.android.vending.*
+
+# Needed by commons logging
+-keep class org.apache.commons.logging.* {*;}
+
+#Some Factory that seemed to be pruned
+-keep class java.util.concurrent.atomic.AtomicReferenceFieldUpdater {*;}
+-keep class java.util.concurrent.atomic.AtomicReferenceFieldUpdaterImpl{*;}
+
+# Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
+
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+# Needed by Guava
+
+-dontwarn sun.misc.Unsafe
+
+# See https://groups.google.com/forum/#!topic/guava-discuss/YCZzeCiIVoI
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+
+# Needed by google-http-client to keep generic types and @Key annotations accessed via reflection
+
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+# Needed by Guava
+# See https://groups.google.com/forum/#!topic/guava-discuss/YCZzeCiIVoI
+
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+
+# Needed by google-http-client-android when linking against an older platform version
+
+-dontwarn com.google.api.client.extensions.android.**
+
+# Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
+
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+# Needed by Guava
+
+-dontwarn sun.misc.Unsafe
+
+# See https://groups.google.com/forum/#!topic/guava-discuss/YCZzeCiIVoI
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+
+-dontwarn com.google.android.maps.MapActivity
+-dontwarn roboguice.activity.RoboMapActivity
+
+-keepclassmembers class com.google.api.services.drive.model.* {
+	<methods>;
+	<fields>;
+}
