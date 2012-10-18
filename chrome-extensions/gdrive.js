@@ -192,6 +192,25 @@
               processData: false,
               success: function(data, textStatus, jqXHR) {
                 $(targetInput).val($(targetInput).val() + " " + data.webContentLink);
+
+                // insert permission for anyone
+                $.ajax({
+                  url: "https://www.googleapis.com/drive/v2/files/" + data.id + "/permissions",
+                  type: 'POST',
+                  headers: {
+                    "Authorization": "Bearer " + oAuthToken
+                  },
+                  data: JSON.stringify({
+                    "role": "reader",
+                    "type": "anyone"
+                  }),
+                  cache: false,
+                  contentType: 'application/json',
+                  processData: false,
+                  dataType: 'json',
+                  success: function(data, textStatus, jqXHR) {
+                  }
+                });
               },
               xhr: function() {  // custom xhr
                 myXhr = $.ajaxSettings.xhr();
